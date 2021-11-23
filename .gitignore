@@ -1,0 +1,13 @@
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+__pycache__/
+bin/
+include/
+lib/
+lib64
+pyvenv.cfg
+share/
+venv/
+
