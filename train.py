@@ -10,15 +10,13 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 from torch.optim import Optimizer
 
-# Hyperparameters
-# TODO: find somewhere else for these
-EPOCHS = 100
-
 
 def train(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer) -> None:
-  for epoch in range(EPOCHS):
-    for x, y in tqdm(data_loader):
-      pass
+  """Train model for a single epoch"""
+  for batch_num, (x, y) in tqdm(enumerate(data_loader)):
+    print("We are currently on batch " + str(batch_num))
+
+  return
 
 
 def main() -> None:

@@ -12,5 +12,5 @@ share/
 venv/
 
 # PyTorch datasets
-datasets/
+dataset/
 
