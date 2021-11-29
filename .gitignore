@@ -11,3 +11,6 @@ pyvenv.cfg
 share/
 venv/
 
+# PyTorch datasets
+datasets/
+
