@@ -1,11 +1,57 @@
 import torch
 import torchvision
 import os
+import sys
+import argparse
 import numpy as np
 
-# SimCLR
-from models.simclr import SimCLR
+from models.simclr import SimCLRModel
+from data.dataloaders import CIFAR10_dataloader, ImageNet_dataloader
+
+# Hyperparameters
+# TODO: Find somewhere else for these; also, fix batch size, this is placeholder
+BATCH_SIZE = 1024
 
 
-def main():
-  pass
+def parse_args() -> argparse.Namespace:
+  """Parse arguments from command line into ARGS."""
+
+  parser = argparse.ArgumentParser(
+      description="The runner for our SimCLR implementation",
+      formatter_class=argparse.ArgumentDefaultsHelpFormatter
+  )
+
+  parser.add_argument(
+      '--data',
+      default='cifar',
+      help='Dataset to use for training and testing',
+      choices=['cifar', 'imagenet'],
+      dest='data'
+  )
+
+  parser.add_argument(
+    '--no-augment',
+    default=False,
+    help='Do not perform data augmentations',
+    action='store_true',
+    dest='noaug'
+  )
+
+  return parser.parse_args()
+
+
+def main() -> None:
+  # Load data
+  if (args.data == "cifar"):
+    print("Loading cifar dataset")
+    train_loader, test_loader = CIFAR10_dataloader(~args.noaug, BATCH_SIZE)
+  elif (args.data == "imagenet"):
+    print("Loading imagenet dataset")
+    train_loader, test_loader = ImageNet_dataloader(~args.noaug, BATCH_SIZE)
+  else:
+    sys.exit("Should not have gotten here.")
+
+
+if __name__ == "__main__":
+  args = parse_args()
+  main()
