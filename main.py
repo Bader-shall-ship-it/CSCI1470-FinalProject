@@ -11,7 +11,7 @@ from train import train
 
 # Hyperparameters
 # TODO: Find somewhere else for these; also, fix batch size, this is placeholder
-BATCH_SIZE = 1024
+BATCH_SIZE = 10
 EPOCHS = 100
 
 
@@ -65,9 +65,8 @@ def main() -> None:
   # Train
   for epoch in range(EPOCHS):
     print("Now on epoch " + str(epoch) + "/" + str(EPOCHS))
-    # TODO: remove  placeholder optimizer
-    placeholder_optim = torch.optim.Adam(model.parameters(), lr=0.001)
-    train(model, train_loader, placeholder_optim)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    train(model, train_loader, optimizer, active_device)
 
 
 if __name__ == "__main__":
