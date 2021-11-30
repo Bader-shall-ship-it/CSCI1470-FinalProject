@@ -4,17 +4,18 @@ import torch.nn.functional as F
 
 def get_pos_and_neg_mask(batch_size, sim_ij, sim_ji):
     pos_mask = torch.cat([sim_ij, sim_ji], dim=0)
-    neg_mask = (~torch.eye(batch_size * 2.0, batch_size * 2.0, dtype=bool)).float()
+    neg_mask = (~torch.eye(batch_size * 2, batch_size * 2, dtype=bool)).float()
     return pos_mask, neg_mask
 
 
 class NTXent(nn.Module):
   """ Normalized Temperature-scaled Cross Entropy loss (contrastive) """
 
-  def __init__(self, batch_size, tau=1.0) -> None:
+  def __init__(self, batch_size, device, tau=1.0) -> None:
     super(NTXent, self).__init__()
     self.batch_size = batch_size
-    self.temperature = torch.tensor(tau)
+    self.temperature = torch.tensor(tau).to(device)
+    self.device = device
 
   def forward(self, e_i, e_j):
     """ forward pass of embedding batch pairs with corresponding indices"""
@@ -26,6 +27,10 @@ class NTXent(nn.Module):
     sim_ij = torch.diag(sim_matrix, self.batch_size)
     sim_ji = torch.diag(sim_matrix, -self.batch_size)
     positives, negatives = get_pos_and_neg_mask(self.batch_size, sim_ij, sim_ji)
+
+    positives = positives.to(self.device)
+    negatives = negatives.to(self.device)
+    sim_matrix = sim_matrix.to(self.device)
 
     nominator = torch.exp(positives / self.temperature)
     denominator = negatives * torch.exp(sim_matrix / self.temperature)
