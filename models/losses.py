@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 def get_pos_and_neg_mask(batch_size, sim_ij, sim_ji):
     pos_mask = torch.cat([sim_ij, sim_ji], dim=0)
-    neg_mask = (~torch.eye(batch_size * 2.0, batch_size * 2.0, dtype=bool)).float()
+    neg_mask = (~torch.eye(batch_size * 2, batch_size * 2, dtype=bool)).float()
     return pos_mask, neg_mask
 
 

@@ -7,7 +7,9 @@ import numpy as np
 
 from models.simclr import SimCLRModel
 from data.dataloaders import CIFAR10_dataloader, ImageNet_dataloader
+from models.losses import NTXent
 from train import train
+
 
 # Hyperparameters
 # TODO: Find somewhere else for these; also, fix batch size, this is placeholder
@@ -65,8 +67,11 @@ def main() -> None:
   # Train
   for epoch in range(EPOCHS):
     print("Now on epoch " + str(epoch) + "/" + str(EPOCHS))
+
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    train(model, train_loader, optimizer, active_device)
+    loss_fn = NTXent(BATCH_SIZE, tau=1)
+
+    train(model, train_loader, optimizer, active_device, loss_fn)
 
 
 if __name__ == "__main__":
