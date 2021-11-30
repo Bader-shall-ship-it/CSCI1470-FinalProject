@@ -15,7 +15,6 @@ class NTXent(nn.Module):
     super(NTXent, self).__init__()
     self.batch_size = batch_size
     self.temperature = torch.tensor(tau)
-    self.pos_mask, self.neg_mask = get_pos_and_neg_mask(batch_size)
 
   def forward(self, e_i, e_j):
     """ forward pass of embedding batch pairs with corresponding indices"""
