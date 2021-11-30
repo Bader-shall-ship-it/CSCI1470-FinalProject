@@ -21,9 +21,9 @@ def CIFAR10_dataloader(augment: bool, batch_size: int, root: str = './dataset') 
         root=root, train=False, download=True, transform=transform_CIFAR10_test)
 
     train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, pin_memory=True)
+        train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, pin_memory=True, drop_last=True)
     test_loader = torch.utils.data.DataLoader(
-        test_dataset, batch_size=batch_size, shuffle=True, num_workers=2, pin_memory=True)
+        test_dataset, batch_size=batch_size, shuffle=True, num_workers=2, pin_memory=True, drop_last=True)
 
     return train_loader, test_loader
 
@@ -37,9 +37,9 @@ def ImageNet_dataloader(augment: bool, batch_size: int, root: str = './dataset')
         root=root, train=False, download=True, transform=transform_ImageNet_test)
 
     train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, pin_memory=True)
+        train_dataset, batch_size=batch_size, shuffle=True, num_workers=2, pin_memory=True, drop_last=True)
     test_loader = torch.utils.data.DataLoader(
-        test_dataset, batch_size=batch_size, shuffle=True, num_workers=2, pin_memory=True)
+        test_dataset, batch_size=batch_size, shuffle=True, num_workers=2, pin_memory=True, drop_last=True)
 
     return train_loader, test_loader
 

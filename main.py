@@ -13,7 +13,7 @@ from train import train
 
 # Hyperparameters
 # TODO: Find somewhere else for these; also, fix batch size, this is placeholder
-BATCH_SIZE = 10
+BATCH_SIZE = 32
 EPOCHS = 100
 
 
@@ -68,8 +68,8 @@ def main() -> None:
   for epoch in range(EPOCHS):
     print("Now on epoch " + str(epoch) + "/" + str(EPOCHS))
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    loss_fn = NTXent(BATCH_SIZE, tau=1)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+    loss_fn = NTXent(BATCH_SIZE, active_device, tau=1)
 
     train(model, train_loader, optimizer, active_device, loss_fn)
 

@@ -12,16 +12,25 @@ import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from torch.optim import Optimizer
 
+# TODO: put this somewhere better
+BATCH_SIZE = 32
 
 def train(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, device: str, loss_fn: nn.Module) -> None:
     """Train model for a single epoch"""
     size = len(data_loader.dataset)
-    
+
     model.train()
-    for batch, (x, _) in tqdm(enumerate(data_loader), total=size):
+    for batch, (x, _) in tqdm(enumerate(data_loader), total=size // BATCH_SIZE):
         # Send tensors to GPU
         x_i = x[0]
         x_j = x[1]
+
+        if (x_i.shape != x_j.shape):
+            print("Houston, we have a problem")
+            print("Shape of x_i: " + x_i.shape)
+            print("Shape of x_j: " + x_j.shape)
+            sys.exit()
+
         x_i, x_j = x_i.to(device), x_j.to(device)
 
         # Compute loss
@@ -35,8 +44,8 @@ def train(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, devic
         optimizer.step()
 
         if batch % 100 == 0:
-          loss, current = loss.item(), batch * len(x)
-          print(f"Loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+            loss, current = loss.item(), batch * len(x)
+            print(f"Loss: {loss:>7f}")
 
     return
 
