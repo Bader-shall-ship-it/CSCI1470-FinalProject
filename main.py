@@ -23,8 +23,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         '--train',
         default=True,
-        help='Whether to train or to test',
+        help='Train',
         action='store_true',
+        dest='train'
+    )
+
+    parser.add_argument(
+        '--test',
+        help='Test',
+        action='store_false',
         dest='train'
     )
 
@@ -82,19 +89,19 @@ def load_data(train: bool) -> Tuple[DataLoader, DataLoader, bool]:
     if (args.data == "cifar"):
         print("Loading cifar dataset")
         train_loader, test_loader = CIFAR10_dataloader(
-            ~args.noaug, args.batch_size)
+            not args.noaug, args.batch_size)
         using_cifar = True
         num_classes = 10
     elif (args.data == "imagenet"):
         print("Loading imagenet dataset")
         train_loader, test_loader = ImageNet_dataloader(
-            ~args.noaug, args.batch_size)
+            not args.noaug, args.batch_size)
         using_cifar = False
         # TODO: no idea how many classes imagenet 2012 has but idt we using it so its should be ok
         num_classes = 1000
 
     # Reduce dastaset if testing
-    if (~train):
+    if not train:
         train_loader = test_loader[:((int)(0.2 * len(train_loader)))]
         test_loader = test_loader[((int)(0.2 * len(test_loader))):((int)(0.4 * len(test_loader)))]
 
@@ -109,7 +116,7 @@ def main(args: argparse.Namespace) -> None:
     # Load data
     train_loader, test_loader, using_cifar, num_classes = load_data(args.train)
 
-    if (train):
+    if (args.train):
         # Train
         model = SimCLRModel(CIFAR=using_cifar, device=active_device)
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -137,4 +144,5 @@ def main(args: argparse.Namespace) -> None:
 
 if __name__ == "__main__":
     args = parse_args()
+    print(args.train)
     main(args)
