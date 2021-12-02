@@ -24,9 +24,8 @@ def parse_args() -> argparse.Namespace:
         '--train',
         default=True,
         help='Whether to train or to test',
-        type=bool,
         action='store_true',
-        dest='action'
+        dest='train'
     )
 
     parser.add_argument(
