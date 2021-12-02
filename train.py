@@ -1,10 +1,10 @@
-import torch
-from torch import nn
 import torch.nn.functional as F
-from tqdm import tqdm
+from torch import nn
+from torch.optim import Optimizer
 # Types
 from torch.utils.data import DataLoader
-from torch.optim import Optimizer
+from tqdm import tqdm
+
 
 def train(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, device: str, loss_fn: nn.Module) -> None:
     """Train contrastive model for a single epoch"""
@@ -29,8 +29,7 @@ def train(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, devic
         optimizer.step()
 
         if batch % 100 == 0:
-            loss, current = loss.item(), batch * len(x)
-            print(f"Loss: {loss:>7f}")
+            print(f"Loss: {loss.item():>7f}")
 
     return
 

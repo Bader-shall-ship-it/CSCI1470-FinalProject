@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
+
 from .modules import ResnetBackbone
+
 
 class SimCLRModel(nn.Module):
     ''' SimCLR model for contrastive learning'''
