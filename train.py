@@ -29,8 +29,7 @@ def train(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, devic
         optimizer.step()
 
         if batch % 100 == 0:
-            loss, current = loss.item(), batch * len(x)
-            print(f"Loss: {loss:>7f}")
+            print(f"Loss: {loss.item():>7f}")
 
     return
 
