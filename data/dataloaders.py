@@ -1,8 +1,10 @@
+from typing import Tuple
+
+import PIL
 import torch
 import torchvision
-import PIL
-from typing import Tuple
 from torch.utils.data.dataloader import DataLoader
+
 from data.utils import generate_augmented_pair, transform_test_img
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]

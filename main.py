@@ -1,14 +1,11 @@
 import argparse
 import os
-import sys
 from typing import Tuple
 
-import numpy as np
 import torch
-import torchvision
 from torch.utils.data import DataLoader
-from analysis import benchmark_simclr_backbone
 
+from analysis import benchmark_simclr_backbone
 from data.dataloaders import CIFAR10_dataloader, ImageNet_dataloader
 from models.losses import NTXent
 from models.simclr import SimCLRModel

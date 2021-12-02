@@ -1,10 +1,12 @@
 import torch
-from torch import nn
-from models.simclr import SimCLRModel, SimCLRClassifier
-from torch.utils.data import DataLoader
 import torch.nn.functional as F
+from torch import nn
 from torch.optim import Optimizer
+from torch.utils.data import DataLoader
+
+from models.simclr import SimCLRClassifier, SimCLRModel
 from train import train_classifier
+
 
 # TODO(Bader): General flow of the program. Not tested yet.
 def benchmark_simclr_backbone(small_train_loader: DataLoader, small_test_loader: DataLoader, num_classes: int, simclr_weights_path: str, CIFAR: bool, device: torch.device):
