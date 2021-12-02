@@ -96,8 +96,8 @@ def load_data(train: bool) -> Tuple[DataLoader, DataLoader, bool]:
 
     # Reduce dastaset if testing
     if (~train):
-        train_loader = train_loader[:((int)(0.01 * len(train_loader)))]
-        test_loader = test_loader[:((int)(0.01 * len(test_loader)))]
+        train_loader = test_loader[:((int)(0.2 * len(train_loader)))]
+        test_loader = test_loader[((int)(0.2 * len(test_loader))):((int)(0.4 * len(test_loader)))]
 
     return train_loader, test_loader, using_cifar, num_classes
 

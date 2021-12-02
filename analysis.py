@@ -30,9 +30,8 @@ def benchmark_simclr_backbone(small_train_loader: DataLoader, small_test_loader:
                     optimizer=optimizer, device=device)
 
 
-def test_classifier(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, device: str) -> None:
+def test_classifier(model: nn.Module, data_loader: DataLoader, device: str) -> None:
     """Test a classifier."""
-    size = len(data_loader.datset)
     num_batches = len(data_loader)
 
     model.eval()
