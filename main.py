@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 
 from analysis import benchmark_simclr_backbone
 from data.dataloaders import CIFAR10_dataloader, ImageNet_dataloader
+from data.utils import create_dataloader_subset
 from models.losses import NTXent
 from models.simclr import SimCLRModel
 from train import train
@@ -102,8 +103,8 @@ def load_data(train: bool) -> Tuple[DataLoader, DataLoader, bool]:
 
     # Reduce dastaset if testing
     if not train:
-        train_loader = test_loader[:((int)(0.2 * len(train_loader)))]
-        test_loader = test_loader[((int)(0.2 * len(test_loader))):((int)(0.4 * len(test_loader)))]
+        size = (int) (len(test_loader.dataset))
+        train_loader, test_loader = create_dataloader_subset(test_loader, size // 10, size // 5, batch_size=args.batch_size)
 
     return train_loader, test_loader, using_cifar, num_classes
 
@@ -139,7 +140,7 @@ def main(args: argparse.Namespace) -> None:
             print("Weights not specified for testing")
         else:
             benchmark_simclr_backbone(train_loader, test_loader, num_classes=num_classes,
-                                      simclr_weights_path=args.weights, cifar=using_cifar, device=active_device)
+                                      simclr_weights_path=args.weights, CIFAR=using_cifar, device=active_device)
 
 
 if __name__ == "__main__":

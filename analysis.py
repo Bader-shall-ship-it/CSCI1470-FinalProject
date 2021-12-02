@@ -18,7 +18,7 @@ def benchmark_simclr_backbone(small_train_loader: DataLoader, small_test_loader:
 
     simclr_classifier = SimCLRClassifier(
         num_classes=num_classes, CIFAR=CIFAR, device=device)
-    simclr_classifier.feature = simclr.feature
+    simclr_classifier.feature = simclr.feature.to(device)
 
     optimizer = torch.optim.Adam(simclr_classifier.parameters(), lr=0.001)
 
@@ -27,7 +27,7 @@ def benchmark_simclr_backbone(small_train_loader: DataLoader, small_test_loader:
 
     # Get accuracy on heldout set, and hope its high.
     test_classifier(simclr_classifier, data_loader=small_test_loader,
-                    optimizer=optimizer, device=device)
+                    device=device)
 
 
 def test_classifier(model: nn.Module, data_loader: DataLoader, device: str) -> None:
@@ -45,6 +45,6 @@ def test_classifier(model: nn.Module, data_loader: DataLoader, device: str) -> N
                         y).type(torch.float).sum().item()
 
     test_loss /= num_batches
-    correct /= num_batches
+    correct /= len(data_loader.dataset)
     print(
         f"Test error: \n Accuracy: {(100*correct):>0.1f}%, average loss: {test_loss:>8f} \n")
