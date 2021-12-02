@@ -80,10 +80,16 @@ def main(args: argparse.Namespace) -> None:
   optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
   loss_fn = NTXent(batch_size, active_device, tau=1)
   
+  checkpoint_path = "./checkpoints/"
+  if not os.path.exists(checkpoint_path):
+        os.makedirs(checkpoint_path, exist_ok=True)
+  
   # Train
   for epoch in range(epochs):
     print("Now on epoch " + str(epoch) + "/" + str(epochs))
     train(model, train_loader, optimizer, active_device, loss_fn)
+    
+    torch.save(model.state_dict(), checkpoint_path+"model_{}.pth".format(epoch))
 
 
 if __name__ == "__main__":

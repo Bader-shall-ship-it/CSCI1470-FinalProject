@@ -6,15 +6,11 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 from torch.optim import Optimizer
 
-# TODO: put this somewhere better
-BATCH_SIZE = 32
-
 def train(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, device: str, loss_fn: nn.Module) -> None:
     """Train contrastive model for a single epoch"""
-    size = len(data_loader.dataset)
-
     model.train()
-    for batch, (x, _) in tqdm(enumerate(data_loader), total=size // BATCH_SIZE):
+
+    for batch, (x, _) in tqdm(enumerate(data_loader), total=len(data_loader)):
         # Send tensors to GPU
         x_i = x[0]
         x_j = x[1]
@@ -41,9 +37,9 @@ def train(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, devic
 
 def train_classifier(model: nn.Module, data_loader: DataLoader, optimizer: Optimizer, device: str) -> None:
     '''Train classification model for a single epoch'''
-    
+
     model.train()
-    for i, (x, y) in enumerate(data_loader):
+    for i, (x, y) in tqdm(enumerate(data_loader), total=len(data_loader)):
         x = x.to(device)
         y = y.to(device)
 
