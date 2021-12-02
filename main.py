@@ -10,13 +10,6 @@ from data.dataloaders import CIFAR10_dataloader, ImageNet_dataloader
 from models.losses import NTXent
 from train import train
 
-
-# Hyperparameters
-# TODO: Find somewhere else for these; also, fix batch size, this is placeholder
-BATCH_SIZE = 32
-EPOCHS = 100
-
-
 def parse_args() -> argparse.Namespace:
   """Parse arguments from command line into ARGS."""
 
@@ -34,6 +27,27 @@ def parse_args() -> argparse.Namespace:
   )
 
   parser.add_argument(
+      '--epochs',
+      default=10,
+      type=int,
+      help='Number of training epochs',
+  )
+
+  parser.add_argument(
+      '--batch_size',
+      default=32,
+      type=int,
+      help='Batch size used for training',
+  )
+
+  parser.add_argument(
+      '--lr',
+      default=1e-3,
+      type=float,
+      help='Optimizer learning rate',
+  )
+
+  parser.add_argument(
       '--no-augment',
       default=False,
       help='Do not perform data augmentations',
@@ -44,36 +58,34 @@ def parse_args() -> argparse.Namespace:
   return parser.parse_args()
 
 
-def main() -> None:
+def main(args: argparse.Namespace) -> None:
   # Get device
   active_device = "cuda" if torch.cuda.is_available() else "cpu"
+  batch_size = args.batch_size
+  epochs = args.epochs
   print(f"Using device: {active_device}")
 
   # Load data
   if (args.data == "cifar"):
     print("Loading cifar dataset")
-    train_loader, test_loader = CIFAR10_dataloader(~args.noaug, BATCH_SIZE)
+    train_loader, test_loader = CIFAR10_dataloader(~args.noaug, batch_size)
     using_cifar = True
   elif (args.data == "imagenet"):
     print("Loading imagenet dataset")
-    train_loader, test_loader = ImageNet_dataloader(~args.noaug, BATCH_SIZE)
+    train_loader, test_loader = ImageNet_dataloader(~args.noaug, batch_size)
     using_cifar = False
-  else:
-    sys.exit("Should not have gotten here.")
 
   # Instantiate model
   model = SimCLRModel(CIFAR=using_cifar, device=active_device)
-
+  optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+  loss_fn = NTXent(batch_size, active_device, tau=1)
+  
   # Train
-  for epoch in range(EPOCHS):
-    print("Now on epoch " + str(epoch) + "/" + str(EPOCHS))
-
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-    loss_fn = NTXent(BATCH_SIZE, active_device, tau=1)
-
+  for epoch in range(epochs):
+    print("Now on epoch " + str(epoch) + "/" + str(epochs))
     train(model, train_loader, optimizer, active_device, loss_fn)
 
 
 if __name__ == "__main__":
   args = parse_args()
-  main()
+  main(args)
