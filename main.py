@@ -84,27 +84,25 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_data(train: bool) -> Tuple[DataLoader, DataLoader, bool]:
+def load_data(train: bool, batch_size: int, augment: bool) -> Tuple[DataLoader, DataLoader, bool]:
     """Loads data for either training or testing."""
     # Create dataloaders
     if (args.data == "cifar"):
         print("Loading cifar dataset")
-        train_loader, test_loader = CIFAR10_dataloader(
-            not args.noaug, args.batch_size)
+        train_loader, test_loader = CIFAR10_dataloader(augment, batch_size)
         using_cifar = True
         num_classes = 10
     elif (args.data == "imagenet"):
         print("Loading imagenet dataset")
-        train_loader, test_loader = ImageNet_dataloader(
-            not args.noaug, args.batch_size)
+        train_loader, test_loader = ImageNet_dataloader(augment, batch_size)
         using_cifar = False
         # TODO: no idea how many classes imagenet 2012 has but idt we using it so its should be ok
         num_classes = 1000
 
-    # Reduce dastaset if testing
+    # Reduce dataset if testing
     if not train:
-        size = (int) (len(test_loader.dataset))
-        train_loader, test_loader = create_dataloader_subset(test_loader, size // 10, size // 5, batch_size=args.batch_size)
+        size = int(len(train_loader.dataset))
+        train_loader, test_loader = create_dataloader_subset(test_loader, size // 10, size // 10, batch_size=args.batch_size)
 
     return train_loader, test_loader, using_cifar, num_classes
 
@@ -128,7 +126,7 @@ def main(args: argparse.Namespace) -> None:
             os.makedirs(checkpoint_path, exist_ok=True)
 
         # Train
-        for epoch in range(1, args.epochs + 1):
+        for epoch in range(args.epochs):
             print("Now on epoch " + str(epoch) + "/" + str(args.epochs))
             train(model, train_loader, optimizer, active_device, loss_fn)
 

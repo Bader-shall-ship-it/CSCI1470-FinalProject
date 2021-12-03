@@ -32,7 +32,7 @@ def create_dataloader_subset(dataloader: DataLoader, train_size: int, test_size:
     train_dataset = torch.utils.data.Subset(dataloader.dataset, torch.arange(train_size))
     test_dataset = torch.utils.data.Subset(dataloader.dataset, torch.arange(train_size, test_size))
 
-    new_train = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True)
-    new_test = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True)
+    new_train = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True, drop_last=True)
+    new_test = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True, drop_last=True)
     
     return new_train, new_test
