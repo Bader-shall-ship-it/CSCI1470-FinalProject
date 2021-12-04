@@ -81,6 +81,13 @@ def parse_args() -> argparse.Namespace:
         dest='weights'
     )
 
+    parser.add_argument(
+        '--tau',
+        default=0.5,
+        type=float,
+        help='Temperature hyperparameter for NTXent loss',
+    )
+
     return parser.parse_args()
 
 
@@ -119,7 +126,7 @@ def main(args: argparse.Namespace) -> None:
         # Train
         model = SimCLRModel(CIFAR=using_cifar, device=active_device)
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-        loss_fn = NTXent(args.batch_size, active_device, tau=1)
+        loss_fn = NTXent(args.batch_size, active_device, tau=args.tau)
 
         checkpoint_path = "./checkpoints/"
         if not os.path.exists(checkpoint_path):
@@ -137,7 +144,7 @@ def main(args: argparse.Namespace) -> None:
         if (args.weights == ''):
             print("Weights not specified for testing")
         else:
-            benchmark_simclr_backbone(train_loader, test_loader, num_classes=num_classes,
+            benchmark_simclr_backbone(train_loader, test_loader, epochs=5, num_classes=num_classes,
                                       simclr_weights_path=args.weights, CIFAR=using_cifar, device=active_device)
 
 

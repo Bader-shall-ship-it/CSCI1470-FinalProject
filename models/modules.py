@@ -4,7 +4,7 @@ import torchvision
 
 class ResnetBackbone(torch.nn.Module):
     def __init__(self, pretrained: bool, CIFAR: bool):
-        super(ResnetBackbone, self).__init__()
+        super().__init__()
 
         resnet = list(torchvision.models.resnet50(
             pretrained=pretrained).children())

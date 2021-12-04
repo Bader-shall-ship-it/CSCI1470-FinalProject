@@ -1,3 +1,4 @@
+import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.optim import Optimizer
@@ -51,3 +52,23 @@ def train_classifier(model: nn.Module, data_loader: DataLoader, optimizer: Optim
 
         if i % 100 == 0:
             print(f"Loss: {loss.item():>7f}")
+
+
+def test_classifier(model: nn.Module, data_loader: DataLoader, device: str) -> None:
+    """Test a classifier."""
+    num_batches = len(data_loader)
+
+    model.eval()
+    test_loss, correct = 0, 0
+    with torch.no_grad():
+        for x, y in data_loader:
+            x, y = x.to(device), y.to(device)
+            logits = model(x)
+            test_loss += F.cross_entropy(logits, y)
+            correct += (logits.argmax(dim=1) ==
+                        y).type(torch.float).sum().item()
+
+    test_loss /= num_batches
+    correct /= len(data_loader.dataset)
+    print(
+        f"Test error: \n Accuracy: {(100*correct):>0.1f}%, average loss: {test_loss:>8f} \n")

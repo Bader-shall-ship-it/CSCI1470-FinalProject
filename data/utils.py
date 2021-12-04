@@ -7,12 +7,12 @@ import PIL
 from typing import Tuple, List
 from torch.utils.data import DataLoader
 
-def generate_augmented_pair(img: PIL.Image, crop_resize: int, normalize_mean: List[float], normalize_std: List[float], scale: float = 1.0) -> Tuple[torch.Tensor, torch.Tensor]:
+def generate_augmented_pair(img: PIL.Image, crop_resize: int, normalize_mean: List[float], normalize_std: List[float], strength: float = 0.5) -> Tuple[torch.Tensor, torch.Tensor]:
     tr = transforms.Compose([
         transforms.RandomResizedCrop(crop_resize),
         transforms.RandomHorizontalFlip(p=0.5),
         transforms.RandomApply([transforms.ColorJitter(
-            0.8*scale, 0.8*scale, 0.8*scale, 0.2*scale)], p=0.8),
+            0.8*strength, 0.8*strength, 0.8*strength, 0.2*strength)], p=0.8),
         transforms.RandomGrayscale(p=0.2),
         transforms.GaussianBlur(kernel_size=0.1*img.height),
         transforms.ToTensor(),
