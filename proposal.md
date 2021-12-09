@@ -44,12 +44,23 @@ The datasets we choose to use in our project also affect our choice of metrics t
 # Division of Labor
 Our tentative plan is to get everyone involved in each stage of the project, with one person taking a lead on one task. We anticipate that implementing the contrastive loss is the most challenging part (also where most of the meat is) so we’ll all contribute equally on this task.
 
-# Referenced Implementations
-- [Spijkervet]: https://github.com/Spijkervet/SimCLR
-
 Our tentative task breakdown is as follows:
 - Preprocessing and data preparation,
 - Implementing the simCLR model,
 - Implementing the contrastive loss,
 - Implementing the contrastive training procedure,
 - Experimentation and ablation studies
+
+# Referenced Implementations
+- https://github.com/Spijkervet/SimCLR
+
+
+[imgnet]: https://image-net.org/static_files/papers/ImageNet_2010.pdf
+[bias1]: https://arxiv.org/abs/2010.15052
+[medGAN]: https://arxiv.org/abs/1811.10669
+[bert]: https://arxiv.org/abs/1810.04805
+[videobert]: https://arxiv.org/abs/1904.01766
+[simclr]: https://arxiv.org/abs/2002.05709
+[creview]: https://arxiv.org/abs/2010.05113
+[stl]: https://ai.stanford.edu/~acoates/stl10/
+[bias2]: https://arxiv.org/abs/1911.11834
